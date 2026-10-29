@@ -1,0 +1,247 @@
+Quickstart Guide: Single Column Model
+
+Abstract
+
+The single-column model simulates the time evolution of a single atmospheric column of the GFDL AM2.1 model (GAMDT, 2004; doi:10.1175/JCLI-3223.1).
+The physics is identical to the one present in the full GCM, but the dynamics component has been replaced by a simple driver.
+
+A number of standard test cases are included as part of the release. Many cases were derived from GASS (Global Atmospheric System Studies) boundary
+layer working group intercomparison studies (formerly known as GCSS). Additional information about the boundary layer cloud working group activities
+can be found at http://appconv.metoffice.com/blclouds.
+
+Users wishing to configure the SCM for another case are encouraged to take an existing case as a starting point.
+
+The existing included test cases are:
+
+* 'arm': SGP ARM intensive observation period (IOP). This case is over land, but the land model is not interacting with the atmosphere.
+  Instead surface fluxes and boundary conditions are overwritten to match observations.
+
+* 'astex': ASTEX Lagrangians simulations.
+  Reference:
+  Bretherton et al 1999; doi:10.1023/A:1002005429969
+  http://www.springerlink.com/content/x2m452p16j271727/
+
+* 'gcss_arm': Continental shallow cumulus boundary layer diurnal cycle (ARM SGP site) idealized from 21 June 1997 observations
+  Reference:
+  Brown et al. 2002, doi:10.1256/003590002320373210
+  http://onlinelibrary.wiley.com/doi/10.1256/003590002320373210/abstract;jsessionid=7A45EDBDBD6A7B4C17394086C60E26F6.d04t04
+
+* 'gcss_astex': Drizzle/no drizzle intercomparison, based on ASTEX Lagrangian 1.
+
+* 'gcss_atex': Transitional trade cumulus case from ATEX
+  Reference:
+  Stevens et al. 2001; doi:10.1175/1520-0469(2001)058<1870:SOTWCU>2.0.CO;2
+  http://journals.ametsoc.org/doi/abs/10.1175/1520-0469%282001%29058%3C1870%3ASOTWCU%3E2.0.CO%3B2
+
+* 'gcss_bomex': BOMEX Trade cumulus case
+  Reference:
+  Siebesma et al. 2007; doi:10.1175/JAS3888.1
+  http://journals.ametsoc.org/doi/abs/10.1175/JAS3888.1
+
+* 'gcss_dycoms2_rf01_{a,b}': nocturnal non-precipitating stratocumulus cases based on research flight RF01 of the DYCOMS-II field experiment
+  References:
+  Stevens et al. 2005; doi:10.1175/MWR2930.1  http://journals.ametsoc.org/doi/abs/10.1175/MWR2930.1
+  Zhu et al. 2005; doi:10.1175/MWR2997.1      http://journals.ametsoc.org/doi/abs/10.1175/MWR2997.1
+
+* 'gcss_dycoms2_rf02': DYCOMS-II RF02 nocturnal drizzling stratocumulus case
+  References:
+  Ackerman et al 2009; doi:10.1175/2008MWR2582.1  http://journals.ametsoc.org/doi/abs/10.1175/2008MWR2582.1
+  Wyant et al. 2007; doi:10.1029/2007JD008536     http://www.agu.org/pubs/crossref/2007/2007JD008536.shtml
+
+* 'gcss_rico_short': RICO precipitating trade cumulus
+  Reference:
+  vanZanten et al. 2011; doi:10.1029/2011MS000056  http://www.agu.org/pubs/crossref/2011/2011MS000056.shtml
+
+* 'mpace_{a,b}': ARM Mixed-Phase Arctic Cloud Experiment
+  Reference:
+  Klein et al. 2009; doi:10.1002/qj.416  http://onlinelibrary.wiley.com/doi/10.1002/qj.416/abstract
+
+  Table of Contents
+
+1. Acquire the SCM package
+2. Acquire large input data files
+3. Run the Model
+    3.1. The Sample Runscripts
+    3.2. Portability Issues
+    3.3. Restarting and cold-starting
+          3.3.1. restarting
+          3.3.2. cold-starting
+    3.4. Time and calendar
+    3.5. diag_table
+    3.6. data_table
+    3.7. field_table
+    3.8. Changing the length of the run and atmospheric time step
+
+4. Examine the Output
+
+1. Acquire the SCM package
+
+The Flexible Modeling System development team at GFDL uses a local implementation
+of GForge to serve FMS software, located at http://fms.gfdl.noaa.gov/gf/account/?action=UserAdd
+In order to obtain the package, you must register as an FMS user on our software server.
+After submitting the registration form on the software server, you should receive an automatically
+generated confirmation email within a few minutes. Clicking on the link in the email confirms the
+creation of your account.
+
+After your account has been created, you should log in and request access
+to the FMS single column atmospheric model project. Once the FMS project administrator grants you
+access, you will receive a second e-mail notification. This email requires action on the part
+of the project administrator and thus may take longer to arrive.
+The email will contain a software access password along with instructions for
+obtaining the release package, which are described below.
+
+You may download the release package from https://fms.gfdl.noaa.gov/gf/project/single_column_model.
+
+Click on "Files" and then click on "single_column_model.tar.gz" to download.
+This package contains code, scripts, small input data files, and a few small tools.
+Due to size restrictions, the largest input data files must be obtained from a different site.
+
+2. Acquire large input data files
+
+You may download the input data from GFDL's ftp server at
+ftp://ftp.gfdl.noaa.gov/perm/pjp/SCM/input_data.tar.gz
+
+This file must first be unzipped using gunzip. Note that the size of the resulting tar file is 5GB.
+Extract the files into a location where you have sufficient free space.
+
+3. Run the Model
+3.1. The Sample Runscripts
+
+This release includes three pairs of compile scripts and three corresponding run scripts.
+These are in the exp directory. Each of these three represents a different platform.
+Each compile script generates a different executable and for each of these executables
+there is a corresponding run script that runs any of twelve different experiments.
+
+Since this is a small and fast model, it runs only on one processor, and does not need
+a supercomputer. For this reason, the compile and run script pair named with
+'on_workstation.without_mpi' are the most likely to be useful.
+They were developed during testing on a workstation at GFDL.
+
+The other two pairs both use the mpi library, but only because the single column model was spun
+off of a full atmospheric model that requires it. One of these runs on the gaea machine at
+ORNL and one runs on a workstation. They are useful because comparison between the three
+pairs of scripts shows what sort of things need modification when platforms change.
+
+Note that the sample scripts provided set the directory and file paths names to
+correspond to the directory structure as it exists after extraction from the tar file.
+They are made variables to accommodate changes to this directory structure.
+The directory path most likely to need changing is workdir. workdir is where the model will run.
+It must have enough space to accommodate the model input and output.
+Note that the input data is approximately 5GB
+
+3.2. Portability Issues
+
+If you encounter a compile error when executing the compile script, first
+check whether you have correctly customized your mkmf template. The scripts use
+the mkmf utility, which creates a Makefile to facilitate compilation. The mkmf
+utility uses a platform-specific template for setting up system and platform
+dependent parameters. Sample templates for various platforms are provided in the
+bin directory. You may need to consult your system administrator to set up a
+compilation template for your platform and ensure the locations for system
+libraries are defined correctly. For a complete description of mkmf see mkmf.html
+
+===================================================================================
+
+3.3  Restarting and cold-starting
+
+3.3.1 Restarting the model to continue a previous integration
+
+  Restart files are written to a sub-directory, named RESTART, off the working directory.
+Information about the state of the model at the point of termination is contained
+in these files. Each component model and/or sub-component may have restart files.
+To continue a previous integration these files are put in the INPUT directory.
+They are read at initialization to restore the state of the model as it was at
+termination of the previous integration.
+
+3.3.2 Cold-starting the model
+
+  If restart files do not exist in the INPUT directory then a default
+initialization is performed, also referred to as a cold-start.
+  The default initialization of each component is required to be compatible with other
+model components, but otherwise is entirely at the discretion of the developer(s).
+The result is a model state that is far away from anything scientifically interesting.
+As a result, a cold-started model needs to be spun-up. The spin-up time varies with
+model and the user's purpose.
+===================================================================================
+3.4. Time and calendar
+
+Control of model time and calendar is a common source of confusion.
+Only a couple facts need to be understood to avoid most of this confusion.
+The first is how the model time and calendar are set. 
+
+ When coupler.res does not exist:
+     current_date and calendar are as specified in coupler_nml
+     and the namelist setting of force_date_from_namelist is ignored.
+
+ When coupler.res does exist and force_date_from_namelist=.true.:
+     current_date and calendar are as specified in coupler_nml.
+
+ When coupler.res does exist and force_date_from_namelist=.false.:
+     current_date and calendar are read from coupler.res and
+     the namelist settings of current_date and calendar are ignored.
+
+The second is the date which appears at the top of the diag table.
+This is the model initial time. It is used for two purposes.
+
+1. It is used to define a time axis for netcdf model output, 
+   the time values are since the initial time.
+
+2. It is also used in the time interpolation of certain input data.
+   Because of this, It is recommended that it always be equal to 
+   the date that was used for current_date (in coupler_nml) in the
+   initial run of the model and that it not change thereafter.
+   That is, do not change it when restarting the model.
+===================================================================================
+3.5  diag_table
+
+ The diagnostic output is controlled via the diagnostics table, which is named "diag_table".
+ Documentation on the use of diag_table comes with the release package. After extraction,
+ it can be found here: src/shared/diag_manager/diag_table.html
+===================================================================================
+3.6  data_table
+
+ NOTE: This package includes an empty data_table. The code expects it to exist, even if empty. 
+
+ The data table includes information about external files that can
+ be read by the data_override code to fill fields of specified data.
+ Documentation on the use of data_table comes with the release package.
+ After extraction, it can be found here: src/shared/data_override/data_override.html 
+===================================================================================
+3.7  field_table
+
+ Aside from the model's required prognostic variables; velocity, pressure,
+ temperature and humidity, the model may or may not have any number of additional
+ prognostic variables. All of them are advected by the dynamical code, sources and
+ sinks are handled by the physics code. These optional fields, referred to as tracers,
+ are specified in field_table. For each tracer, the method of advection, convection,
+ source and sink that are to be applied to the tracer is specified in the table.
+ In essence the field_table is a powerful type of namelist.
+
+ A more thorough description of field_table comes with the release package.
+ After extraction, it can be found here: src/shared/field_manager/field_manager.html
+===================================================================================
+3.8  Changing the length of the run and atmospheric time step
+
+The run length is controlled by coupler_nml. The variables months, days and hours set
+the run length. coupler_nml appears in the input.nml files.
+The run lengths as initially set are rather short, intended only for testing.
+
+4. Examine the output
+
+You may download sample output data for comparison at ftp://ftp.gfdl.noaa.gov/perm/pjp/SCM/sample_output.tar.gz
+The sample output is 32MB in size. This output was generated on a workstation at GFDL.
+The output is organized into three directories: ascii, history and restart.
+The ascii directory contains text output of the model. 
+The history directory contains netCDF diagnostic output, governed by your entries in the diag_table.
+The restart directory contains files which describe the state of the model at termination.
+To restart the model running from this state, these restart files are moved to the INPUT
+directory to serve as the initial conditions for your next run.
+
+
+Privacy Policy | Disclaimer
+US Department of Commerce | NOAA | OAR | Geophysical Fluid Dynamics Laboratory
+physical address: Princeton Forrestal Campus 201 Forrestal Road, Princeton NJ, 08542-0308
+mailing address: PO Box 308, Princeton NJ, 08542-0308
+phone: (609) 452-6500 fax: (609) 987-5063
+mail to: web master
+last modified: March 10, 2012

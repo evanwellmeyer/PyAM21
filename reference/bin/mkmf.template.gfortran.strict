@@ -1,0 +1,83 @@
+# gfortran template for the PyAM21 reference build (macOS arm64, conda eamxx-ref toolchain)
+# Strict floating point: no FMA contraction, no fast-math, so PyTorch can match closely.
+FC = gfortran
+CC = gcc
+LD = gfortran
+NETCDF_ROOT = $(CONDA_REF)
+INCLUDE = -I$(NETCDF_ROOT)/include
+FPPFLAGS := -cpp -Wp,-w $(INCLUDE)
+FFLAGS := -fcray-pointer -fdefault-real-8 -fdefault-double-8 -ffree-line-length-none \
+          -fallow-argument-mismatch -fallow-invalid-boz -fno-range-check -fno-fast-math \
+          -ffp-contract=off -O1 -g -w $(INCLUDE) $(EXTRA_FFLAGS)
+CFLAGS := -D__IFC $(INCLUDE) -O1 -ffp-contract=off -Wno-implicit-function-declaration -Wno-int-conversion
+LDFLAGS := -L$(NETCDF_ROOT)/lib -Wl,-rpath,$(NETCDF_ROOT)/lib -lnetcdff -lnetcdf
+RM = rm -f
+SHELL = /bin/sh
+TMPFILES = .*.m *.B *.L *.i *.i90 *.l *.s *.mod *.opt
+
+.SUFFIXES: .F .F90 .H .L .T .f .f90 .h .i .i90 .l .o .s .opt .x
+
+.f.L:
+	$(FC) $(FFLAGS) -c $*.f
+.f.opt:
+	$(FC) $(FFLAGS) -c -opt_report_level max -opt_report_phase all -opt_report_file $*.opt $*.f
+.f.l:
+	$(FC) $(FFLAGS) -c $(LIST) $*.f
+.f.T:
+	$(FC) $(FFLAGS) -c -cif $*.f
+.f.o:
+	$(FC) $(FFLAGS) -c $*.f
+.f.s:
+	$(FC) $(FFLAGS) -S $*.f
+.f.x:
+	$(FC) $(FFLAGS) -o $*.x $*.f *.o $(LDFLAGS)
+.f90.L:
+	$(FC) $(FFLAGS) -c $*.f90
+.f90.opt:
+	$(FC) $(FFLAGS) -c -opt_report_level max -opt_report_phase all -opt_report_file $*.opt $*.f90
+.f90.l:
+	$(FC) $(FFLAGS) -c $(LIST) $*.f90
+.f90.T:
+	$(FC) $(FFLAGS) -c -cif $*.f90
+.f90.o:
+	$(FC) $(FFLAGS) -c $*.f90
+.f90.s:
+	$(FC) $(FFLAGS) -c -S $*.f90
+.f90.x:
+	$(FC) $(FFLAGS) -o $*.x $*.f90 *.o $(LDFLAGS)
+.F.L:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c $*.F
+.F.opt:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c -opt_report_level max -opt_report_phase all -opt_report_file $*.opt $*.F
+.F.l:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c $(LIST) $*.F
+.F.T:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c -cif $*.F
+.F.f:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) -E $*.F > $*.f
+.F.i:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) -P $*.F
+.F.o:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c $*.F
+.F.s:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c -S $*.F
+.F.x:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -o $*.x $*.F *.o $(LDFLAGS)
+.F90.L:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c $*.F90
+.F90.opt:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c -opt_report_level max -opt_report_phase all -opt_report_file $*.opt $*.F90
+.F90.l:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c $(LIST) $*.F90
+.F90.T:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c -cif $*.F90
+.F90.f90:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) -E $*.F90 > $*.f90
+.F90.i90:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) -P $*.F90
+.F90.o:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c $*.F90
+.F90.s:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -c -S $*.F90
+.F90.x:
+	$(FC) $(CPPDEFS) $(FPPFLAGS) $(FFLAGS) -o $*.x $*.F90 *.o $(LDFLAGS)

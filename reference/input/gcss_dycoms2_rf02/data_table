@@ -1,0 +1,4 @@
+# RF02
+#gridname, fieldname_code, fieldname_file, filename, ongrid, factor
+"ICE", "t_surf", "", "", .false., 291.5
+#"LND", "ts_land",  "", "", .false., 291.5

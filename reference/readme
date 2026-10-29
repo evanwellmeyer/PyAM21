@@ -1,0 +1,27 @@
+Where to start
+~~~~~~~~~~~~~~
+See the "doc" directory, where you will find
+a "quickstart" guide for the FMS single column model.
+
+
+Summary of directory contents
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bin/
+     -- mkmf script for creating Makefiles
+     -- template files for the mkmf script
+     -- list_paths generates a list of source files using find
+     -- time_stamp.csh used by run script
+
+doc/
+     -- quickstart guide
+
+input/
+     -- model input files for various single column experiments.
+           includes namelists, diagnostics tables, field tables.
+
+exp/ -- compile script. (uses mkmf)
+     -- list of source code. (used by mkmf)
+     -- run script for running the model.
+
+src/
+     -- source code for the single column model

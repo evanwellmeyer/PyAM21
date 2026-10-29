@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyam21"
+version = "0.0.1"
+description = "PyTorch port of the GFDL single column model with AM2.1 physics, validated against the Fortran reference"
+readme = "README.md"
+license = { text = "GPL-2.0-or-later" }
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26", "torch>=2.2"]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+io = ["netCDF4>=1.6"]
+dev = ["pyam21[test,io]"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["pyam21*"]
+
+[tool.pytest.ini_options]
+addopts = "--strict-config --strict-markers"
+testpaths = ["tests"]
+markers = [
+    "reference: replays saved Fortran reference data (skipped if data absent)",
+    "mps: runs on the Apple MPS device (skipped if unavailable)",
+]

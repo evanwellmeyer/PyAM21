@@ -1,0 +1,3 @@
+# GCSS RICO short
+#gridname, fieldname_code, fieldname_file, filename, ongrid, factor
+"ICE", "t_surf", "", "", .false., 299.8

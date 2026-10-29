@@ -1,0 +1,12 @@
+# Project environment for the PyTorch port. conda-forge pytorch (MPS-enabled on osx-arm64)
+# so numpy and torch share one OpenMP runtime (pip torch + conda numpy aborts on macOS).
+name: pyam21
+channels: [conda-forge]
+dependencies:
+  - python=3.12
+  - pytorch
+  - numpy
+  - pytest
+  - netcdf4
+  - matplotlib
+  - pip
